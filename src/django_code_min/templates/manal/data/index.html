@@ -1,0 +1,153 @@
+{% extends "manal/default.html" %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/data.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="manal-date">
+        <form action="{% url 'manal:data' %}" method="get">
+            <div class="centered se-date">
+                <input type="date" name="startDate" required pattern="\d{4}-\d{2}-\d{2}"
+                    value="{{ startDate }}" min="{{ minDate }}" max="{{ maxDate }}">
+                <span>~</span>
+                <input type="date" name="endDate" required pattern="\d{4}-\d{2}-\d{2}"
+                    value="{{ endDate }}" min="{{ minDate }}" max="{{ maxDate }}">
+                <input type="submit" value="→">
+            </div>
+        </form>
+    </div>
+    <div class="manal-music">
+        <div class="manal-music-ranking">
+            <div class="wrapper-music-list">
+                <div class="music-list-search">
+                    <input type="search" id="music-list-search" name="music-list-search"
+                        placeholder="검색..." aria-label="Search music in music list.">
+                </div>
+                <div class="selected-music-list">
+                </div>
+                <div class="music-list">
+                </div>
+            </div>
+            <div class="wrapper-music-list-filter">
+                <div class="music-list-filter">
+                    <label>
+                        범위:
+                        <input type="number" name="min" class="n-range"
+                            min="1", max="100" value="1">
+                        ~
+                        <input type="number" name="max" class="n-range"
+                            min="1", max="100" value="100">
+                    </label>
+                    <fieldset class="filter-genre filter-gt">
+                        <legend>장르</legend>
+                    </fieldset>
+                    <fieldset class="filter-type filter-gt">
+                        <legend>타입</legend>
+                    </fieldset>
+                    <fieldset class="filter-a-name">
+                        <legend>가수</legend>
+                        <input type="text" list="artist-name-list" class="input-a-name aal-name">
+                        <datalist id="artist-name-list">
+                        </datalist>
+                    </fieldset>
+                    <fieldset class="filter-al-name">
+                        <legend>앨범</legend>
+                        <input type="text" list="album-name-list" class="input-al-name aal-name">
+                        <datalist id="album-name-list">
+                        </datalist>
+                    </fieldset>
+                </div>
+                <div class="filter-btn">
+                    <span class="num-selected">#: 0 / 0</span>
+                    <input type="button" id="filter-init" class="to-right" value="초기화">
+                    <input type="button" id="filter-apply" class="to-right" value="적용">
+                </div>
+            </div>
+            <div class="wrapper-music-detail">
+                <div class="music-detail">
+                    <div class="wrapper-album-img">
+                        <figure>
+                            <img class="album-img">
+                        </figure>
+                    </div>
+                    <div class="wrapper-alta">
+                        <p class="album-name">[앨범]</p>
+                        <p class="music-name">[제목]</p>
+                        <p class="artist-name">[가수]</p>
+                    </div>
+                    <div class="wrapper-gte gte-dl">
+                        <dl>
+                            <dt>음악</dt>
+                            <dd class="music-genre">[장르]</dd>
+                            <dt>앨범</dt>
+                            <dd class="album-genre">[장르]</dd>
+                            <dt>가수</dt>
+                            <dd class="artist-genre">[장르]</dd>
+                        </dl>
+                        <hr>
+                        <dl>
+                            <dt>가수</dt>
+                            <dd class="artist-type">[타입]</dd>
+                        </dl>
+                        <hr>
+                        <dl>
+                            <dt>발매일</dt>
+                            <dd class="release_date">[발매일]</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div id='curve_chart'></div>
+        </div>
+        <hr>
+        <div class="manal-genre-count">
+            <div class="genre-cnt-filter">
+                <h2>장르별 카운터</h2>
+                <select name="genre-cnt-1" class="genre-cnt">
+                    <option value="">--장르1--</option>
+                </select>
+                <select name="genre-cnt-2" class="genre-cnt">
+                    <option value="">--장르2--</option>
+                </select>
+                <select name="genre-cnt-3" class="genre-cnt">
+                    <option value="">--장르3--</option>
+                </select>
+            </div>
+            <div class="wrapper-genre-cnt-chart">
+                <div id="genre_cnt_chart_1" class="genre_cnt_chart"></div>
+                <div id="genre_cnt_chart_2" class="genre_cnt_chart"></div>
+                <div id="genre_cnt_chart_3" class="genre_cnt_chart"></div>
+                <div id="genre_cnt_chart_4" class="genre_cnt_chart"></div>
+                <div id="genre_cnt_chart_5" class="genre_cnt_chart"></div>
+                <div id="genre_cnt_chart_6" class="genre_cnt_chart"></div>
+            </div>
+        </div>
+        <hr>
+        <div class="manal-type-count">
+            <div class="type-cnt-filter">
+                <h2>타입별 카운터</h2>
+                <select name="type-cnt-1" class="type-cnt">
+                    <option value="">--타입1--</option>
+                </select>
+                <select name="type-cnt-2" class="type-cnt">
+                    <option value="">--타입2--</option>
+                </select>
+                <select name="type-cnt-3" class="type-cnt">
+                    <option value="">--타입3--</option>
+                </select>
+            </div>
+            <div class="wrapper-type-cnt-chart">
+                <div id="type_cnt_chart_1" class="type_cnt_chart"></div>
+                <div id="type_cnt_chart_2" class="type_cnt_chart"></div>
+                <div id="type_cnt_chart_3" class="type_cnt_chart"></div>
+                <div id="type_cnt_chart_4" class="type_cnt_chart"></div>
+                <div id="type_cnt_chart_5" class="type_cnt_chart"></div>
+                <div id="type_cnt_chart_6" class="type_cnt_chart"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

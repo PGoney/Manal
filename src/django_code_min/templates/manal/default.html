@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        {% block title %}<title>Manal</title>{% endblock %}
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        {% block javascripts %}{% endblock %}
+    </head>
+    <body>
+        <div id="manal-wrap">
+            <div id="manal-header">
+                <div class="flex-row">
+                    <div class="wrapper-header">
+                        <header>
+                            <h1><a href="{% url 'manal:index' %}">Manal</a></h1>
+                        </header>
+                    </div>
+                    <div class="wrapper-nav">
+                        <nav class="master-nav">
+                            <ul>
+                                <li><a href="{% url 'manal:data' %}">데이터</a></li>
+                                <li><a href="{% url 'manal:analize' %}">분석</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="wrapper-author">
+                        <h5>by 박지원</h5>
+                    </div>
+                </div>
+            </div>
+            <div id="manal-content">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </body>
+</html>
